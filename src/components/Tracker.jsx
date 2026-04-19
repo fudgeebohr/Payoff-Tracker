@@ -1,5 +1,6 @@
 import "./Tracker.css";
 import React, { useState, useEffect } from "react";
+import logo from "./assets/logo.png";
 
 const Tracker = () => {
   const [records, setRecords] = useState([]);
@@ -8,8 +9,8 @@ const Tracker = () => {
     amount: "",
     totalMonths: "",
     paidMonths: "",
-    platform: "Platform",
-    payer: "Payer"
+    platform: "SPayLater",
+    payer: "Kenneth"
   });
 
   const API_BASE = "https://payofftrackerapi.onrender.com";
@@ -49,16 +50,10 @@ const Tracker = () => {
 
       if (response.ok) {
         setFormData({ 
-          itemName: "", 
-          amount: "", 
-          totalMonths: "", 
-          paidMonths: "", 
-          platform: "Platform", 
-          payer: "Payer" 
+          itemName: "", amount: "", totalMonths: "", 
+          paidMonths: "", platform: "SPayLater", payer: "Kenneth" 
         });
-        
-        await fetchRecords(); 
-        
+        await fetchRecords();
         alert("Record Added!");
       }
     } catch (error) {
@@ -72,10 +67,9 @@ const Tracker = () => {
 
   return (
     <div className="dashboard-wrapper">
-      {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="logo-container">
-          <h1 className="logo-text">Payoff Tracker</h1>
+          <img src={logo} alt="Payoff Tracker Logo" className="sidebar-logo" />
           <p className="sub-logo">by fudgeebohr</p>
         </div>
 
@@ -111,7 +105,6 @@ const Tracker = () => {
         </form>
       </aside>
 
-      {/* MAIN CONTENT */}
       <main className="main-content">
         <div className="table-card">
           <table>
