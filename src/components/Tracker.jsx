@@ -68,7 +68,7 @@ const Tracker = () => {
     <div className="dashboard-wrapper">
       <aside className="sidebar">
         <div className="logo-container">
-          <img src="./logo.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
+          <img src="https://iili.io/BgjZDb4.md.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
         </div>
 
         <form onSubmit={handleSubmit} className="tracker-form">

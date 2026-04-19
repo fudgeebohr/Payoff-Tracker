@@ -39,7 +39,7 @@ const Login = ({ onLogin }) => {
     <div className="login-wrapper" style={styles.wrapper}>
       <form onSubmit={handleSubmit} className="tracker-form" style={styles.form}>
         <div className="logo-container">
-          <img src="./logo.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
+          <img src="https://iili.io/BgjZDb4.md.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
         </div>
         <h2 style={{ color: '#9b6d9b', textAlign: 'center', fontFamily: 'century gothic', fontWeight: 'bold' }}>
           {isRegistering ? "Create Account" : "Login"}
