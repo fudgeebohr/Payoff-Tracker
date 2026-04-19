@@ -1,94 +1,143 @@
 import "./Tracker.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Tracker = () => {
+  const [records, setRecords] = useState([]);
   const [formData, setFormData] = useState({
     itemName: "",
     amount: "",
-    category: "General",
-    status: "Pending"
+    totalMonths: "",
+    paidMonths: "",
+    platform: "SPayLater",
+    payer: "Kenneth"
   });
+
+  const API_BASE = "https://payofftrackerapi.onrender.com";
+
+  useEffect(() => {
+    fetchRecords();
+  }, []);
+
+  const fetchRecords = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/save_record`);
+      const data = await response.json();
+      setRecords(data);
+    } catch (err) {
+      console.error("Error fetching records:", err);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.itemName || !formData.amount) {
-      alert("Please enter the item name and amount.");
-      return;
-    }
-
     try {
-        const response = await fetch("https://payofftrackerapi.onrender.com/save_record", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            itemName: formData.itemName,
-            amount: Number(formData.amount), // Ensure amount is a Number
-            category: formData.category,
-            status: formData.status
-          })
-        });
+      const response = await fetch(`${API_BASE}/save_record`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          amount: Number(formData.amount),
+          totalMonths: Number(formData.totalMonths),
+          paidMonths: Number(formData.paidMonths)
+        })
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
+      if (response.ok) {
+        alert("Record Added!");
+        setFormData({ itemName: "", amount: "", totalMonths: "", paidMonths: "", platform: "SPayLater", payer: "Kenneth" });
+        fetchRecords();
       }
-
-      alert(`Success! Tracked: ${formData.itemName} for ₱${formData.amount}`);
-      setFormData({ itemName: "", amount: "", category: "General", status: "Pending" });
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred while submitting the form.");
+      alert("Failed to save record.");
     }
   };
 
+  const calculateTotalDue = () => {
+    return records.reduce((sum, rec) => sum + rec.amount, 0).toLocaleString();
+  };
+
   return (
-    <div className="tracker-container">
-      <h2>Payoff Entry</h2>
-      <form onSubmit={handleSubmit} className="tracker-form">
-        <div className="form-group">
-          <label>Item Name:</label>
-          <input
-            type="text"
-            name="itemName"
-            value={formData.itemName}
-            onChange={handleChange}
-            placeholder="e.g., Monthly Rent"
-          />
+    <div className="dashboard-wrapper">
+      {/* SIDEBAR */}
+      <aside className="sidebar">
+        <div className="logo-container">
+          <h1 className="logo-text">bnpl tracker</h1>
+          <p className="sub-logo">BY FUDGEEBOHR</p>
         </div>
 
-        <div className="form-group">
-          <label>Amount (PHP):</label>
-          <input
-            type="number"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            placeholder="0.00"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="tracker-form">
+          <label>Item Name</label>
+          <input type="text" name="itemName" value={formData.itemName} onChange={handleChange} placeholder="e.g. iPhone 13" />
 
-        <div className="form-group">
-          <label>Category:</label>
-          <select name="category" value={formData.category} onChange={handleChange}>
-            <option value="General">General</option>
-            <option value="Bills">Bills</option>
-            <option value="Education">Education</option>
-            <option value="Leisure">Leisure</option>
+          <label>Monthly Amortization</label>
+          <input type="number" name="amount" value={formData.amount} onChange={handleChange} placeholder="0.00" />
+
+          <label>Total Months (Duration)</label>
+          <input type="number" name="totalMonths" value={formData.totalMonths} onChange={handleChange} placeholder="e.g. 12" />
+
+          <label>Months Already Paid</label>
+          <input type="number" name="paidMonths" value={formData.paidMonths} onChange={handleChange} placeholder="e.g. 5" />
+
+          <label>Platform</label>
+          <select name="platform" value={formData.platform} onChange={handleChange}>
+            <option value="SPayLater">SPayLater</option>
+            <option value="TikTok PayLater">TikTok PayLater</option>
+            <option value="GLoan">GLoan</option>
           </select>
+
+          <label>Who is Paying?</label>
+          <select name="payer" value={formData.payer} onChange={handleChange}>
+            <option value="Kenneth">Kenneth</option>
+            <option value="Joy">Joy</option>
+            <option value="Shane">Shane</option>
+            <option value="Group (Thesis)">Group (Thesis)</option>
+          </select>
+
+          <button type="submit" className="add-record-btn">+ Add Record</button>
+        </form>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="main-content">
+        <div className="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Platform</th>
+                <th>Payer</th>
+                <th>Monthly</th>
+                <th>Progress</th>
+                <th>Rem. Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((rec) => (
+                <tr key={rec._id}>
+                  <td>{rec.itemName}</td>
+                  <td>{rec.platform}</td>
+                  <td>{rec.payer}</td>
+                  <td>₱{rec.amount.toLocaleString()}</td>
+                  <td>{rec.paidMonths}/{rec.totalMonths}</td>
+                  <td className="balance">
+                    ₱{(rec.amount * (rec.totalMonths - rec.paidMonths)).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <button type="submit" className="submit-btn">Save Record</button>
-      </form>
+        <div className="summary-footer">
+          <span className="total-label">₱ {calculateTotalDue()}</span>
+          <span className="total-text">TOTAL MONTHLY DUE:</span>
+        </div>
+      </main>
     </div>
   );
 };
