@@ -26,7 +26,7 @@ const Tracker = () => {
     }
 
     try {
-      const response = await fetch("https://payofftrackerapi.onrender.com/api/save_record", {
+      const response = await fetch("https://payofftrackerapi.onrender.com/save_record", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
