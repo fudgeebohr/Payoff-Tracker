@@ -1,7 +1,8 @@
 import "./Tracker.css";
 import React, { useState, useEffect } from "react";
 
-const Tracker = () => {
+// The onLogout prop comes from App.jsx to handle the session state change
+const Tracker = ({ onLogout }) => {
   const [records, setRecords] = useState([]);
   const [formData, setFormData] = useState({
     itemName: "",
@@ -60,6 +61,15 @@ const Tracker = () => {
     }
   };
 
+  // Logic to handle Logout
+  const handleLogout = () => {
+    // 1. Remove the login flag from local storage
+    localStorage.removeItem("isLoggedIn");
+    
+    // 2. Call the parent function to update the UI state
+    onLogout();
+  };
+
   const calculateTotalDue = () => {
     return records.reduce((sum, rec) => sum + rec.amount, 0).toLocaleString();
   };
@@ -101,6 +111,11 @@ const Tracker = () => {
 
           <button type="submit" className="add-record-btn">+ Add Record</button>
         </form>
+
+        {/* LOGOUT BUTTON - Place this inside the sidebar but outside the form */}
+        <button onClick={handleLogout} className="logout-btn">
+          Logout
+        </button>
       </aside>
 
       <main className="main-content">

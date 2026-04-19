@@ -12,4 +12,18 @@ function App() {
   return <Tracker />;
 }
 
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+
+  return (
+    <>
+      {isLoggedIn ? (
+        <Tracker onLogout={() => setIsLoggedIn(false)} />
+      ) : (
+        <Login onLogin={() => setIsLoggedIn(true)} />
+      )}
+    </>
+  );
+}
+
 export default App;

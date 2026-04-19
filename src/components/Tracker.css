@@ -24,11 +24,12 @@ html, body, #root {
   padding: 40px 25px; /* Increased padding for a cleaner look */
   border-right: 2px solid #d3b8d3;
   background-color: #fdf5e6;
+  box-sizing: border-box;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  box-sizing: border-box;
-  overflow-y: auto;
+  padding-bottom: 30px; /* Space for the logout button */
 }
 
 .logo-container {
@@ -95,6 +96,38 @@ html, body, #root {
 
 .add-record-btn:hover {
   background-color: #7a5a7a;
+}
+
+.logout-btn {
+  margin-top: auto; /* Pushes the button to the bottom of the sidebar flexbox */
+  background: transparent;
+  color: #9b6d9b;
+  border: 2px solid #9b6d9b;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #9b6d9b;
+  color: white;
+}
+
+.logout-btn .icon {
+  font-size: 1.2rem;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .logout-btn {
+    margin-top: 20px; /* On mobile, it just follows the form instead of pinning to bottom */
+  }
 }
 
 /* MAIN CONTENT: FILLS REMAINING SPACE */
