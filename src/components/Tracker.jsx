@@ -1,6 +1,5 @@
 import "./Tracker.css";
 import React, { useState, useEffect } from "react";
-import logo from "./assets/logo.png";
 
 const Tracker = () => {
   const [records, setRecords] = useState([]);
@@ -69,7 +68,7 @@ const Tracker = () => {
     <div className="dashboard-wrapper">
       <aside className="sidebar">
         <div className="logo-container">
-          <img src={logo} alt="Payoff Tracker Logo" className="sidebar-logo" />
+          <img src="./logo.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
           <p className="sub-logo">by fudgeebohr</p>
         </div>
 
