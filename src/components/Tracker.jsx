@@ -48,12 +48,21 @@ const Tracker = () => {
       });
 
       if (response.ok) {
+        setFormData({ 
+          itemName: "", 
+          amount: "", 
+          totalMonths: "", 
+          paidMonths: "", 
+          platform: "Platform", 
+          payer: "Payer" 
+        });
+        
+        await fetchRecords(); 
+        
         alert("Record Added!");
-        setFormData({ itemName: "", amount: "", totalMonths: "", paidMonths: "", platform: "SPayLater", payer: "Kenneth" });
-        fetchRecords();
       }
     } catch (error) {
-      alert("Failed to save record.");
+      console.error("Submission error:", error);
     }
   };
 
@@ -66,8 +75,8 @@ const Tracker = () => {
       {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="logo-container">
-          <h1 className="logo-text">bnpl tracker</h1>
-          <p className="sub-logo">BY FUDGEEBOHR</p>
+          <h1 className="logo-text">Payoff Tracker</h1>
+          <p className="sub-logo">by fudgeebohr</p>
         </div>
 
         <form onSubmit={handleSubmit} className="tracker-form">
