@@ -168,3 +168,68 @@ tr:hover {
   border-top: 1px solid #d3b8d3;
   padding-top: 20px;
 }
+
+/* MOBILE RESPONSIVE RULES */
+@media (max-width: 768px) {
+  
+  /* 1. Stack Sidebar and Main Content vertically */
+  .dashboard-wrapper {
+    flex-direction: column;
+    height: auto; /* Allow the page to scroll naturally */
+    overflow-y: visible;
+  }
+
+  html, body, #root {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  /* 2. Make Sidebar full width and adjust padding */
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 2px solid #d3b8d3;
+    padding: 20px;
+  }
+
+  .logo-container {
+    text-align: center;
+  }
+
+  /* 3. Main Content takes full width */
+  .main-content {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+
+  /* 4. Make Table scrollable horizontally */
+  .table-card {
+    overflow-x: auto; /* Adds a horizontal scrollbar for the table only */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 600px; /* Ensures columns have enough room to show data */
+  }
+
+  /* 5. Adjust Footer for Mobile */
+  .summary-footer {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+
+  .total-label {
+    font-size: 2rem; /* Shrink font slightly for smaller screens */
+  }
+
+  .tracker-form input, 
+  .tracker-form select {
+    font-size: 16px; 
+    padding: 12px;
+  }
+}
+

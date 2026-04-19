@@ -134,8 +134,8 @@ const Tracker = () => {
         </div>
 
         <div className="summary-footer">
-          <span className="total-label">₱ {calculateTotalDue()}</span>
           <span className="total-text">TOTAL MONTHLY DUE:</span>
+          <span className="total-label">₱ {calculateTotalDue()}</span>
         </div>
       </main>
     </div>
