@@ -14,75 +14,59 @@ html, body, #root {
   background-color: #fdf5e6;
   color: #5a4a5a;
   box-sizing: border-box;
-  font-family: century gothic, sans-serif;
+  font-family: 'Century Gothic', sans-serif;
 }
 
 /* SIDEBAR: PINNED TO LEFT */
 .sidebar {
   width: 420px;
   min-width: 320px;
-  padding: 40px 25px; /* Increased padding for a cleaner look */
+  padding: 40px 25px;
   border-right: 2px solid #d3b8d3;
   background-color: #fdf5e6;
   box-sizing: border-box;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding-bottom: 30px; /* Space for the logout button */
 }
 
 .logo-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centers logo in sidebar */
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 20px;
   width: 100%;
 }
 
 .sidebar-logo {
-  width: 100%;      /* Makes logo responsive to sidebar width */
-  max-width: 410px; /* Prevents it from getting too huge */
-  height: auto;     /* Maintains aspect ratio */
+  width: 100%;
+  max-width: 410px;
+  height: auto;
   object-fit: fill;
-  margin-bottom: 0px;
 }
 
 .tracker-form {
   display: flex;
   flex-direction: column;
-  margin-top: 0px;
-  font-family: century gothic, sans-serif;
-  width: 100%; /* Force form to fill sidebar width */
-}
-
-/* Force Labels and Inputs to be their own lines */
-.tracker-form label {
-  display: block; /* Ensures label stays on top */
-  font-size: 0.85rem;
-  margin-top: 13px;
-  margin-bottom: 5px; /* Space between label and input */
-  font-weight: 600;
-  color: #5a4a5a;
-  font-family: century gothic, sans-serif;
+  gap: 15px; /* Consistent spacing between placeholders */
+  width: 100%;
 }
 
 .tracker-form input, 
 .tracker-form select {
-  width: 100%; /* Fills the width of the sidebar */
-  padding: 10px;
+  width: 100%;
+  padding: 12px;
   border: 1px solid #c4a4c4;
   border-radius: 4px;
   background: white;
-  box-sizing: border-box; /* Includes padding in width calculation */
-  font-size: 0.9rem;
-  font-family: century gothic, sans-serif;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  font-family: 'Century Gothic', sans-serif;
 }
 
-/* Professional Button Look */
-.add-record-btn {
+/* UNIFIED BUTTON STYLE */
+.add-record-btn, .logout-btn {
   width: 100%;
-  margin-top: 30px;
   padding: 14px;
   background-color: #9b6d9b;
   color: white;
@@ -92,49 +76,23 @@ html, body, #root {
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.2s ease;
+  font-family: 'Century Gothic', sans-serif;
 }
 
-.add-record-btn:hover {
+.add-record-btn {
+  margin-top: 15px;
+}
+
+.logout-btn {
+  margin-top: auto; /* Pinned to bottom */
+  margin-bottom: 20px;
+}
+
+.add-record-btn:hover, .logout-btn:hover {
   background-color: #7a5a7a;
 }
 
-/* MATCHING THE LOGOUT BUTTON TO THE ADD RECORD BUTTON STYLE */
-.logout-btn {
-  margin-top: auto; /* Pushes the button to the bottom */
-  width: 100%;
-  padding: 14px;
-  background-color: #9b6d9b; /* Matches Add Record button color */
-  color: white; /* White text for solid background */
-  border: none;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease;
-  font-family: century gothic, sans-serif;
-}
-
-.logout-btn:hover {
-  background-color: #7a5a7a; /* Matches the hover state of Add Record */
-  color: white;
-}
-
-.logout-btn .icon {
-  font-family: century gothic, sans-serif;
-  font-size: 2rem;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 768px) {
-  .logout-btn {
-    margin-top: 20px; /* On mobile, it just follows the form instead of pinning to bottom */
-  }
-}
-
-/* MAIN CONTENT: FILLS REMAINING SPACE */
+/* MAIN CONTENT */
 .main-content {
   flex: 1;
   padding: 30px;
@@ -144,7 +102,6 @@ html, body, #root {
   box-sizing: border-box;
 }
 
-/* TABLE CARD: FLEX-GROW PUSHES FOOTER DOWN */
 .table-card {
   background: white;
   border: 1px solid #d3b8d3;
@@ -152,7 +109,7 @@ html, body, #root {
   flex: 1;
   overflow-y: auto;
   margin-bottom: 20px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.02); /* Subtle depth */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
 }
 
 table {
@@ -164,21 +121,21 @@ th {
   position: sticky;
   top: 0;
   background-color: #efe2ef;
-  padding: 18px 15px; /* Increased vertical padding (18px) */
+  padding: 18px 15px;
   font-size: 0.95rem;
   text-align: center;
   border-bottom: 2px solid #d3b8d3;
   color: #5a4a5a;
   z-index: 10;
-  letter-spacing: 0.5px;
 }
 
 td {
-  padding: 13px 12px; /* Adjust the 16px to your preferred row height */
+  padding: 13px 12px;
   border-bottom: 1px solid #eee;
   font-size: 0.9rem;
   color: #333;
-  vertical-align: middle; /* Ensures text stays centered if rows get tall */
+  text-align: center;
+  vertical-align: middle;
 }
 
 tr:nth-child(even) {
@@ -186,17 +143,14 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: #f4ecf4; /* Subtle highlight on hover */
-  transition: background 0.2s ease;
+  background-color: #f4ecf4;
 }
 
-/* BOLDING THE REMAINING BALANCE */
 .balance {
   font-weight: 700;
   color: #5a4a5a;
 }
 
-/* FOOTER: PINNED TO BOTTOM */
 .summary-footer {
   text-align: right;
   display: flex;
@@ -206,67 +160,36 @@ tr:hover {
   padding-top: 20px;
 }
 
-/* MOBILE RESPONSIVE RULES */
-@media (max-width: 768px) {
-  
-  /* 1. Stack Sidebar and Main Content vertically */
-  .dashboard-wrapper {
-    flex-direction: column;
-    height: auto; /* Allow the page to scroll naturally */
-    overflow-y: visible;
-  }
-
-  html, body, #root {
-    height: auto;
-    overflow-y: visible;
-  }
-
-  /* 2. Make Sidebar full width and adjust padding */
-  .sidebar {
-    width: 100%;
-    min-width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 2px solid #d3b8d3;
-    padding: 20px;
-  }
-
-  .logo-container {
-    text-align: center;
-  }
-
-  /* 3. Main Content takes full width */
-  .main-content {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-  }
-
-  /* 4. Make Table scrollable horizontally */
-  .table-card {
-    overflow-x: auto; /* Adds a horizontal scrollbar for the table only */
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table {
-    min-width: 600px; /* Ensures columns have enough room to show data */
-  }
-
-  /* 5. Adjust Footer for Mobile */
-  .summary-footer {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 5px;
-  }
-
-  .total-label {
-    font-size: 2rem; /* Shrink font slightly for smaller screens */
-  }
-
-  .tracker-form input, 
-  .tracker-form select {
-    font-size: 16px; 
-    padding: 12px;
-  }
+.total-text {
+  font-size: 0.9rem;
+  font-weight: bold;
 }
 
+.total-label {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #d19a66;
+  margin-left: 10px;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .dashboard-wrapper, html, body, #root {
+    flex-direction: column;
+    height: auto;
+    overflow-y: visible;
+  }
+  .sidebar, .main-content {
+    width: 100%;
+    height: auto;
+  }
+  .logout-btn {
+    margin-top: 20px;
+  }
+  .table-card {
+    overflow-x: auto;
+  }
+  table {
+    min-width: 600px;
+  }
+}

@@ -1,7 +1,6 @@
 import "./Tracker.css";
 import React, { useState, useEffect } from "react";
 
-// The onLogout prop comes from App.jsx to handle the session state change
 const Tracker = ({ onLogout }) => {
   const [records, setRecords] = useState([]);
   const [formData, setFormData] = useState({
@@ -9,8 +8,8 @@ const Tracker = ({ onLogout }) => {
     amount: "",
     totalMonths: "",
     paidMonths: "",
-    platform: "SPayLater",
-    payer: "Kenneth"
+    platform: "", // Empty to trigger placeholder option
+    payer: ""     // Empty to trigger placeholder option
   });
 
   const API_BASE = "https://payofftrackerapi.onrender.com";
@@ -36,6 +35,12 @@ const Tracker = ({ onLogout }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validation to ensure select fields are chosen
+    if (!formData.platform || !formData.payer) {
+      alert("Please select a Platform and Payer.");
+      return;
+    }
+
     try {
       const response = await fetch(`${API_BASE}/save_record`, {
         method: "POST",
@@ -44,14 +49,14 @@ const Tracker = ({ onLogout }) => {
           ...formData,
           amount: Number(formData.amount),
           totalMonths: Number(formData.totalMonths),
-          paidMonths: Number(formData.paidMonths)
+          paidMonths: Number(formData.paidMonths) || 0
         })
       });
 
       if (response.ok) {
         setFormData({ 
           itemName: "", amount: "", totalMonths: "", 
-          paidMonths: "", platform: "SPayLater", payer: "Kenneth" 
+          paidMonths: "", platform: "", payer: "" 
         });
         await fetchRecords();
         alert("Record Added!");
@@ -61,12 +66,8 @@ const Tracker = ({ onLogout }) => {
     }
   };
 
-  // Logic to handle Logout
   const handleLogout = () => {
-    // 1. Remove the login flag from local storage
     localStorage.removeItem("isLoggedIn");
-    
-    // 2. Call the parent function to update the UI state
     onLogout();
   };
 
@@ -82,27 +83,50 @@ const Tracker = ({ onLogout }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="tracker-form">
-          <label>Item Name</label>
-          <input type="text" name="itemName" value={formData.itemName} onChange={handleChange} placeholder="e.g. iPhone 13" />
+          <input 
+            type="text" 
+            name="itemName" 
+            value={formData.itemName} 
+            onChange={handleChange} 
+            placeholder="Item Name" 
+            required 
+          />
 
-          <label>Monthly Amortization</label>
-          <input type="number" name="amount" value={formData.amount} onChange={handleChange} placeholder="0.00" />
+          <input 
+            type="number" 
+            name="amount" 
+            value={formData.amount} 
+            onChange={handleChange} 
+            placeholder="Monthly Amortization (0.00)" 
+            required 
+          />
 
-          <label>Total Months (Duration)</label>
-          <input type="number" name="totalMonths" value={formData.totalMonths} onChange={handleChange} placeholder="e.g. 12" />
+          <input 
+            type="number" 
+            name="totalMonths" 
+            value={formData.totalMonths} 
+            onChange={handleChange} 
+            placeholder="Total Months (Duration)" 
+            required 
+          />
 
-          <label>Months Already Paid</label>
-          <input type="number" name="paidMonths" value={formData.paidMonths} onChange={handleChange} placeholder="e.g. 5" />
+          <input 
+            type="number" 
+            name="paidMonths" 
+            value={formData.paidMonths} 
+            onChange={handleChange} 
+            placeholder="Months Already Paid" 
+          />
 
-          <label>Platform</label>
-          <select name="platform" value={formData.platform} onChange={handleChange}>
+          <select name="platform" value={formData.platform} onChange={handleChange} required>
+            <option value="" disabled hidden>Select Platform</option>
             <option value="SPayLater">SPayLater</option>
             <option value="TikTok PayLater">TikTok PayLater</option>
             <option value="GLoan">GLoan</option>
           </select>
 
-          <label>Who is Paying?</label>
-          <select name="payer" value={formData.payer} onChange={handleChange}>
+          <select name="payer" value={formData.payer} onChange={handleChange} required>
+            <option value="" disabled hidden>Who is Paying?</option>
             <option value="Kenneth">Kenneth</option>
             <option value="Joy">Joy</option>
             <option value="Shane">Shane</option>
@@ -112,7 +136,6 @@ const Tracker = ({ onLogout }) => {
           <button type="submit" className="add-record-btn">+ Add Record</button>
         </form>
 
-        {/* LOGOUT BUTTON - Place this inside the sidebar but outside the form */}
         <button onClick={handleLogout} className="logout-btn">
           Logout
         </button>
@@ -149,8 +172,8 @@ const Tracker = ({ onLogout }) => {
         </div>
 
         <div className="summary-footer">
-          <span className="total-text">TOTAL MONTHLY DUE:</span>
-          <span className="total-label">₱ {calculateTotalDue()}</span>
+          <span className="total-text">TOTAL MONTHLY DUE: </span>
+          <span className="total-label"> ₱ {calculateTotalDue()}</span>
         </div>
       </main>
     </div>
