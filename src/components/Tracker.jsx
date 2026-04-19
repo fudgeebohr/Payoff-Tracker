@@ -69,7 +69,6 @@ const Tracker = () => {
       <aside className="sidebar">
         <div className="logo-container">
           <img src="./logo.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
-          <p className="sub-logo">by fudgeebohr</p>
         </div>
 
         <form onSubmit={handleSubmit} className="tracker-form">

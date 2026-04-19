@@ -35,32 +35,22 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center; /* Centers logo in sidebar */
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   width: 100%;
 }
 
 .sidebar-logo {
   width: 100%;      /* Makes logo responsive to sidebar width */
-  max-width: 250px; /* Prevents it from getting too huge */
+  max-width: 410px; /* Prevents it from getting too huge */
   height: auto;     /* Maintains aspect ratio */
-  object-fit: contain;
-  margin-bottom: 5px;
-}
-
-.sub-logo {
-  font-size: 0.75rem;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-align: right;
-  width: 100%;      /* Aligns the "by fudgeebohr" to the right of the logo */
-  color: #5a4a5a;
-  margin-top: 0;
+  object-fit: fill;
+  margin-bottom: 0px;
 }
 
 .tracker-form {
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
+  margin-top: 0px;
   font-family: century gothic, sans-serif;
   width: 100%; /* Force form to fill sidebar width */
 }
