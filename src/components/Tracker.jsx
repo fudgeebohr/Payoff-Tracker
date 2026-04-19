@@ -26,13 +26,18 @@ const Tracker = () => {
     }
 
     try {
-      const response = await fetch("https://payofftrackerapi.onrender.com/save_record", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
+        const response = await fetch("https://payofftrackerapi.onrender.com/save_record", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            itemName: formData.itemName,
+            amount: Number(formData.amount), // Ensure amount is a Number
+            category: formData.category,
+            status: formData.status
+          })
+        });
 
       if (!response.ok) {
         throw new Error("Failed to submit form");
