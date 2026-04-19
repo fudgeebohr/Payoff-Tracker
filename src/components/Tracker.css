@@ -60,7 +60,7 @@ html, body, #root {
 .tracker-form label {
   display: block; /* Ensures label stays on top */
   font-size: 0.85rem;
-  margin-top: 15px;
+  margin-top: 13px;
   margin-bottom: 5px; /* Space between label and input */
   font-weight: 600;
   color: #5a4a5a;
@@ -98,29 +98,33 @@ html, body, #root {
   background-color: #7a5a7a;
 }
 
+/* MATCHING THE LOGOUT BUTTON TO THE ADD RECORD BUTTON STYLE */
 .logout-btn {
-  margin-top: auto; /* Pushes the button to the bottom of the sidebar flexbox */
-  background: transparent;
-  color: #9b6d9b;
-  border: 2px solid #9b6d9b;
-  padding: 10px;
+  margin-top: auto; /* Pushes the button to the bottom */
+  width: 100%;
+  padding: 14px;
+  background-color: #9b6d9b; /* Matches Add Record button color */
+  color: white; /* White text for solid background */
+  border: none;
   font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
+  font-family: century gothic, sans-serif;
 }
 
 .logout-btn:hover {
-  background-color: #9b6d9b;
+  background-color: #7a5a7a; /* Matches the hover state of Add Record */
   color: white;
 }
 
 .logout-btn .icon {
-  font-size: 1.2rem;
+  font-family: century gothic, sans-serif;
+  font-size: 2rem;
 }
 
 /* Mobile Adjustments */

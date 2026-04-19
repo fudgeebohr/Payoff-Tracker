@@ -3,27 +3,18 @@ import Tracker from "./components/Tracker";
 import Login from "./components/Login";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+  // Check localStorage so the user stays logged in even if they refresh the page
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
 
+  // If not logged in, show only the Login/Register screen
   if (!isLoggedIn) {
     return <Login onLogin={() => setIsLoggedIn(true)} />;
   }
 
-  return <Tracker />;
-}
-
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
-
-  return (
-    <>
-      {isLoggedIn ? (
-        <Tracker onLogout={() => setIsLoggedIn(false)} />
-      ) : (
-        <Login onLogin={() => setIsLoggedIn(true)} />
-      )}
-    </>
-  );
+  // If logged in, show the Tracker and pass the logout function
+  return <Tracker onLogout={() => setIsLoggedIn(false)} />;
 }
 
 export default App;
