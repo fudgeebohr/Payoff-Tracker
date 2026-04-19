@@ -8,8 +8,8 @@ const Tracker = () => {
     amount: "",
     totalMonths: "",
     paidMonths: "",
-    platform: "SPayLater",
-    payer: "Kenneth"
+    platform: "Platform",
+    payer: "Payer"
   });
 
   const API_BASE = "https://payofftrackerapi.onrender.com";
