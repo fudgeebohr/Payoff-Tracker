@@ -9,6 +9,7 @@ const Login = ({ onLogin }) => {
     const endpoint = isRegistering ? "register" : "login";
     
     try {
+      // Connect to your live Render backend
       const res = await fetch(`https://payofftrackerapi.onrender.com/auth/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -19,17 +20,18 @@ const Login = ({ onLogin }) => {
 
       if (res.ok) {
         if (isRegistering) {
-          alert("Registration successful! Please log in.");
-          setIsRegistering(false); // Switch to login mode
+          alert("Account created! You can now log in.");
+          setIsRegistering(false); // UI switches to Login mode
         } else {
           localStorage.setItem("isLoggedIn", "true");
-          onLogin();
+          onLogin(); // Updates App.jsx state to show Tracker
         }
       } else {
-        alert(data.message || "Action failed");
+        alert(data.message || "Something went wrong.");
       }
     } catch (err) {
-      alert("Server error. Please check Render logs.");
+      console.error("Auth error:", err);
+      alert("Cannot connect to server. Ensure your Render API is awake.");
     }
   };
 
