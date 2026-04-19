@@ -17,7 +17,7 @@ const Tracker = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.itemName || !formData.amount) {
@@ -25,11 +25,25 @@ const Tracker = () => {
       return;
     }
 
-    console.log("Form Submitted Successfully (Dummy Mode):", formData);
-    
-    alert(`Success! Tracked: ${formData.itemName} for ₱${formData.amount}`);
+    try {
+      const response = await fetch("https://payofftrackerapi.onrender.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-    setFormData({ itemName: "", amount: "", category: "General", status: "Pending" });
+      if (!response.ok) {
+        throw new Error("Failed to submit form");
+      }
+
+      alert(`Success! Tracked: ${formData.itemName} for ₱${formData.amount}`);
+      setFormData({ itemName: "", amount: "", category: "General", status: "Pending" });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred while submitting the form.");
+    }
   };
 
   return (
