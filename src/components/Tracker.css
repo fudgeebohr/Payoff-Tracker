@@ -277,4 +277,11 @@ tr:hover {
   table {
     min-width: 600px;
   }
+  .action-buttons {
+    flex-direction: column; /* Stacks buttons on top of each other on mobile */
+    width: 100%;
+  }
+  .btn-action {
+    width: 100%; /* Makes them full-width on mobile */
+  }
 }
