@@ -231,11 +231,24 @@ tr:hover {
 /* Adjusting the footer layout to give buttons more room */
 .summary-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Buttons on left, Total on right */
   align-items: center;
-  padding: 20px 0;
-  border-top: 1px solid #d3b8d3;
+  padding: 30px 0;
+  border-top: 2px solid #d3b8d3;
   margin-top: 10px;
+  gap: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.total-group {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  white-space: nowrap; /* Keeps total on one line in web view */
 }
 
 /* MODAL STYLING */
@@ -280,12 +293,35 @@ tr:hover {
 }
 
 @media (max-width: 768px) {
-  .action-buttons {
-    flex-direction: column; /* Stacks buttons on top of each other on mobile */
-    width: 100%;
+  /* ... existing sidebar/content stacking ... */
+
+  .summary-footer {
+    flex-direction: column; /* Stacks everything vertically */
+    align-items: stretch;    /* Forces children to fill the full width */
+    gap: 20px;
+    padding: 20px 0;
   }
-  
+
+  .action-buttons {
+    flex-direction: column; /* Stacks Pay, Edit, and Delete */
+    width: 100%;
+    gap: 10px;
+  }
+
   .btn-action {
-    width: 100%; /* Makes them full-width on mobile */
+    width: 100%;       /* Dynamic width to match screen */
+    min-width: 100%;   /* Overrides the web view min-width */
+    box-sizing: border-box;
+    padding: 16px;     /* Slightly larger for easier mobile tapping */
+  }
+
+  .total-group {
+    justify-content: flex-end; /* Keeps total aligned to right under buttons */
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .total-label {
+    font-size: 1.8rem; /* Scale down slightly for mobile screens */
   }
 }
