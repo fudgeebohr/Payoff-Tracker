@@ -14,7 +14,7 @@ html, body, #root {
   background-color: #fdf5e6;
   color: #5a4a5a;
   box-sizing: border-box;
-  font-family: 'Century Gothic', sans-serif;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
 }
 
 /* SIDEBAR: PINNED TO LEFT */
@@ -61,7 +61,7 @@ html, body, #root {
   background: white;
   box-sizing: border-box;
   font-size: 0.95rem;
-  font-family: 'Century Gothic', sans-serif;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
 }
 
 /* UNIFIED BUTTON STYLE */
@@ -76,7 +76,7 @@ html, body, #root {
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.2s ease;
-  font-family: 'Century Gothic', sans-serif;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
 }
 
 .add-record-btn {
