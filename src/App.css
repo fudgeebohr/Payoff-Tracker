@@ -182,3 +182,13 @@
     border-right-color: var(--border);
   }
 }
+
+html, body, #root {
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input, select, button, textarea {
+  font-family: inherit;
+}
