@@ -34,36 +34,41 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="login-wrapper">
-      <form onSubmit={handleSubmit} className="tracker-form login-card">
-        <h2 className="login-title">{isRegistering ? "Create Account" : "Login"}</h2>
+    <div className="login-screen">
+      <div className="login-panel">
+        <div className="logo-container">
+           <img src="https://iili.io/BgjZDb4.md.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
+        </div>
         
-        {/* Placeholders replace labels to save space */}
-        <input 
-          type="text" 
-          placeholder="Username" 
-          required
-          onChange={e => setCredentials({...credentials, username: e.target.value})} 
-        />
-        
-        <input 
-          type="password" 
-          placeholder="Password" 
-          required
-          onChange={e => setCredentials({...credentials, password: e.target.value})} 
-        />
-        
-        <button type="submit" className="add-record-btn">
-          {isRegistering ? "Register" : "Sign In"}
-        </button>
+        <form onSubmit={handleSubmit} className="tracker-form">
+          <input 
+            type="text" 
+            placeholder="Username" 
+            required
+            value={credentials.username}
+            onChange={e => setCredentials({...credentials, username: e.target.value})} 
+          />
+          
+          <input 
+            type="password" 
+            placeholder="Password" 
+            required
+            value={credentials.password}
+            onChange={e => setCredentials({...credentials, password: e.target.value})} 
+          />
+          
+          <button type="submit" className="add-record-btn">
+            {isRegistering ? "Register" : "Sign In"}
+          </button>
 
-        <p className="toggle-text">
-          {isRegistering ? "Already have an account?" : "Need an account?"} 
-          <span onClick={() => setIsRegistering(!isRegistering)} className="toggle-link">
-            {isRegistering ? " Login here" : " Register here"}
-          </span>
-        </p>
-      </form>
+          <p className="toggle-text">
+            {isRegistering ? "Already have an account?" : "Need an account?"} 
+            <span onClick={() => setIsRegistering(!isRegistering)} className="toggle-link">
+              {isRegistering ? " Login here" : " Register here"}
+            </span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };
