@@ -1,59 +1,31 @@
-/* LOGIN PAGE STYLING */
-.login-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #fdf5e6;
+/* Ensure the inputs inside the login form look professional */
+.login-wrapper input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c4a4c4;
+  border-radius: 4px;
+  background: white;
+  box-sizing: border-box;
+  font-size: 0.95rem;
   font-family: 'Century Gothic', sans-serif;
 }
 
-.login-panel {
-  width: 100%;
-  max-width: 400px;
-  background: white;
-  padding: 40px;
-  border-radius: 8px;
-  border: 1px solid #d3b8d3;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box;
+/* Placeholder styling for a cleaner look */
+.login-wrapper input::placeholder {
+  color: #a08da0;
+  opacity: 0.8;
 }
 
-.login-panel .logo-container {
-  margin-bottom: 30px;
-}
-
-.login-panel .tracker-form {
-  gap: 15px;
-}
-
-.toggle-text {
-  font-size: 0.85rem;
-  text-align: center;
-  margin-top: 25px;
-  color: #5a4a5a;
-}
-
-.toggle-link {
-  color: #9b6d9b;
-  cursor: pointer;
-  font-weight: bold;
-  text-decoration: underline;
-  margin-left: 5px;
-}
-
-/* MOBILE RESPONSIVENESS FOR LOGIN */
+/* MOBILE RESPONSIVE: Center the box but allow room for the keyboard */
 @media (max-width: 768px) {
-  .login-screen {
+  .login-wrapper {
+    height: 100vh;
     padding: 20px;
-    align-items: flex-start;
-    padding-top: 10vh;
-    overflow-y: auto;
+    align-items: center !important; /* Keep it centered even on mobile */
   }
 
-  .login-panel {
-    padding: 30px 20px;
-    max-width: 100%;
+  .login-wrapper .tracker-form {
+    padding: 30px 20px !important;
+    gap: 12px;
   }
 }
