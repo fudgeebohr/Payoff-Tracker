@@ -15,6 +15,7 @@ const Tracker = ({ onLogout }) => {
     payer: ""
   });
   const [isPayConfirmOpen, setIsPayConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const API_BASE = "https://payofftrackerapi.onrender.com";
 
@@ -133,23 +134,27 @@ const Tracker = ({ onLogout }) => {
     }
   };
 
-  const handleDelete = async () => {
-    if (!selectedId) return alert("Please select an item first!");
-    const item = records.find(r => r._id === selectedId);
-    if (window.confirm(`Are you sure you want to archive "${item.itemName}"?`)) {
-      try {
-        const response = await fetch(`${API_BASE}/save_record/${selectedId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ archived: true })
-        });
-        if (response.ok) {
-          setSelectedId(null);
-          await fetchRecords();
-        }
-      } catch (error) {
-        console.error("Delete error:", error);
+  const handleDeleteClick = () => {
+    if (!selectedId) return alert("Please select an item from the table first!");
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsDeleteConfirmOpen(false); // Close modal
+    try {
+      const response = await fetch(`${API_BASE}/save_record/delete/${selectedId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        await fetchRecords(); // Refresh table
+        setSelectedId(null);   // Clear selection
+        alert("Record has been deleted.");
+      } else {
+        alert("Failed to delete record.");
       }
+    } catch (error) {
+      console.error("Delete error:", error);
     }
   };
 
@@ -231,7 +236,7 @@ const Tracker = ({ onLogout }) => {
               if (item) { setEditData(item); setIsEditing(true); }
               else { alert("Select an item first!"); }
             }}>Edit Selected</button>
-            <button className="btn-action delete" onClick={handleDelete}>Delete</button>
+            <button className="btn-action delete" onClick={handleDeleteClick}>Delete</button>
           </div>
           <div className="total-group">
             <span className="total-text">TOTAL MONTHLY DUE: </span>
@@ -319,6 +324,33 @@ const Tracker = ({ onLogout }) => {
                 Yes, Confirm Payment
               </button>
               <button className="logout-btn" onClick={() => setIsPayConfirmOpen(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isDeleteConfirmOpen && (
+        <div className="modal-overlay">
+          <div className="modal-panel">
+            <h2 className="modal-title" style={{ color: '#ff6b6b' }}>Delete Record</h2>
+            <p style={{ textAlign: 'center', marginBottom: '20px', color: '#5a4a5a' }}>
+              Are you sure you want to delete 
+              <strong> {records.find(r => r._id === selectedId)?.itemName}</strong>? 
+              This will remove it from your active list immediately.
+            </p>
+            
+            <div className="modal-footer">
+              {/* Using a red button style for the destructive action */}
+              <button 
+                className="add-record-btn" 
+                style={{ backgroundColor: '#ff6b6b' }} 
+                onClick={confirmDelete}
+              >
+                Yes, Delete It
+              </button>
+              <button className="logout-btn" onClick={() => setIsDeleteConfirmOpen(false)}>
                 Cancel
               </button>
             </div>
