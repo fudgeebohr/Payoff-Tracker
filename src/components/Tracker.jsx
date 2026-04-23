@@ -222,10 +222,11 @@ const Tracker = ({ onLogout }) => {
       {isEditing && (
         <div className="modal-overlay">
           <div className="modal-panel">
-            <h2 className="modal-title">Edit Record</h2>
+            <h2 className="modal-title" style={{ textAlign: 'center', color: '#9b6d9b', marginBottom: '20px' }}>
+              Edit Record
+            </h2>
             
             <form onSubmit={handleUpdate} className="tracker-form">
-              {/* All inputs inside the centered box */}
               <input 
                 type="text" 
                 name="itemName" 

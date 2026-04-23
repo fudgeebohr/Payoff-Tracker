@@ -266,7 +266,23 @@ tr:hover {
   backdrop-filter: blur(3px); /* Soft focus effect */
 }
 
-/* MODAL PANEL: Matching your Login box */
+/* MODAL OVERLAY: Centered and Blur effect */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(90, 74, 90, 0.4); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+  box-sizing: border-box;
+}
+
+/* MODAL PANEL: Matching Login UI */
 .modal-panel {
   width: 100%;
   max-width: 400px;
@@ -276,28 +292,19 @@ tr:hover {
   border: 1px solid #d3b8d3;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-title {
-  color: #9b6d9b;
-  text-align: center;
-  margin-bottom: 25px;
-  font-family: 'Century Gothic', sans-serif;
-  font-weight: bold;
 }
 
 .modal-panel .tracker-form {
-  gap: 15px; /* Consistent spacing for placeholders */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* ACTION BUTTONS WITHIN MODAL */
 .modal-footer {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 /* Responsive adjustment for the modal */
@@ -366,5 +373,30 @@ tr:hover {
 
   .total-label {
     font-size: 1.8rem; /* Scale down slightly for mobile screens */
+  }
+}
+
+/* MOBILE RESPONSIVE UPDATES FOR MODAL */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 20px;
+    align-items: flex-start; /* Aligns to top so user can scroll if content is long */
+    padding-top: 5vh;
+    overflow-y: auto; /* Enables scrolling for the modal itself */
+  }
+
+  .modal-panel {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+
+  .modal-panel input, 
+  .modal-panel select {
+    font-size: 16px; /* Prevents iOS auto-zoom */
+    padding: 14px;  /* Larger touch target */
+  }
+
+  .modal-footer {
+    gap: 12px;
   }
 }
