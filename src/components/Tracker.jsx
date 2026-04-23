@@ -72,21 +72,39 @@ const Tracker = ({ onLogout }) => {
   };
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`${API_BASE}/save_record/${editData._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editData)
-      });
-      if (response.ok) {
-        setIsEditing(false);
-        await fetchRecords();
-        alert("Record Updated!");
-      }
-    } catch (error) {
-      console.error("Update error:", error);
+  e.preventDefault();
+  
+  try {
+    const response = await fetch(`${API_BASE}/save_record/update/${editData._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...editData,
+        amount: Number(editData.amount),
+        totalMonths: Number(editData.totalMonths),
+        paidMonths: Number(editData.paidMonths)
+      })
+    });
+
+    if (response.ok) {
+      // 1. Close the modal
+      setIsEditing(false);
+      
+      // 2. Refresh the table data from the database
+      await fetchRecords();
+      
+      // 3. Clear the selection
+      setSelectedId(null);
+      
+      alert("Record updated successfully!");
+    } else {
+      const errorData = await response.json();
+      alert(`Update failed: ${errorData.message}`);
     }
+  } catch (error) {
+    console.error("Update error:", error);
+    alert("An error occurred while updating the record.");
+  }
   };
 
   const handlePayClick = () => {
