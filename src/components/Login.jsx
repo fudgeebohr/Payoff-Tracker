@@ -9,7 +9,6 @@ const Login = ({ onLogin }) => {
     const endpoint = isRegistering ? "register" : "login";
     
     try {
-      // Connect to your live Render backend
       const res = await fetch(`https://payofftrackerapi.onrender.com/auth/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -20,41 +19,36 @@ const Login = ({ onLogin }) => {
 
       if (res.ok) {
         if (isRegistering) {
-          alert("Account created! You can now log in.");
-          setIsRegistering(false); // UI switches to Login mode
+          alert("Account created! Please log in.");
+          setIsRegistering(false);
         } else {
           localStorage.setItem("isLoggedIn", "true");
-          onLogin(); // Updates App.jsx state to show Tracker
+          onLogin();
         }
       } else {
-        alert(data.message || "Something went wrong.");
+        alert(data.message || "Authentication failed");
       }
     } catch (err) {
-      console.error("Auth error:", err);
-      alert("Cannot connect to server. Ensure your Render API is awake.");
+      alert("Server error. Ensure your Render API is awake.");
     }
   };
 
   return (
-    <div className="login-wrapper" style={styles.wrapper}>
-      <form onSubmit={handleSubmit} className="tracker-form" style={styles.form}>
-        <div className="logo-container">
-          <img src="https://iili.io/BgjZDb4.md.png" alt="Payoff Tracker Logo" className="sidebar-logo" />
-        </div>
-        <h2 style={{ color: '#9b6d9b', textAlign: 'center', fontFamily: 'century gothic', fontWeight: 'bold' }}>
-          {isRegistering ? "Create Account" : "Login"}
-        </h2>
+    <div className="login-wrapper">
+      <form onSubmit={handleSubmit} className="tracker-form login-card">
+        <h2 className="login-title">{isRegistering ? "Create Account" : "Login"}</h2>
         
-        <label>Username</label>
+        {/* Placeholders replace labels to save space */}
         <input 
           type="text" 
+          placeholder="Username" 
           required
           onChange={e => setCredentials({...credentials, username: e.target.value})} 
         />
         
-        <label>Password</label>
         <input 
           type="password" 
+          placeholder="Password" 
           required
           onChange={e => setCredentials({...credentials, password: e.target.value})} 
         />
@@ -63,25 +57,15 @@ const Login = ({ onLogin }) => {
           {isRegistering ? "Register" : "Sign In"}
         </button>
 
-        <p style={styles.toggleText}>
+        <p className="toggle-text">
           {isRegistering ? "Already have an account?" : "Need an account?"} 
-          <span 
-            onClick={() => setIsRegistering(!isRegistering)} 
-            style={styles.toggleLink}
-          >
+          <span onClick={() => setIsRegistering(!isRegistering)} className="toggle-link">
             {isRegistering ? " Login here" : " Register here"}
           </span>
         </p>
       </form>
     </div>
   );
-};
-
-const styles = {
-  wrapper: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#fdf5e6' },
-  form: { maxWidth: '320px', width: '90%', padding: '40px', background: 'white', borderRadius: '8px', border: '1px solid #d3b8d3', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' },
-  toggleText: { fontFamily: 'Century Gothic', fontSize: '0.85rem', textAlign: 'center', marginTop: '20px' },
-  toggleLink: { color: '#9b6d9b', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }
 };
 
 export default Login;

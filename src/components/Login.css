@@ -1,20 +1,67 @@
+/* Ensure global font consistency across all devices */
+html, body, #root {
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Login specific responsive styling */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fdf5e6;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 350px;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #d3b8d3;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Adds consistent spacing between placeholder inputs */
+}
+
+.login-title {
+  color: #9b6d9b;
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: 'Century Gothic', sans-serif;
+}
+
+.toggle-text {
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.toggle-link {
+  color: #9b6d9b;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+/* Mobile Responsiveness for Login */
 @media (max-width: 768px) {
-  .login-wrapper, html, body, #root {
-    font-family: 'Century Gothic', CenturyGothic, sans-serif;
-    height: auto !important; 
-    padding: 40px 20px;
-    align-items: flex-start !important;
+  .login-wrapper {
+    padding: 20px;
+    align-items: flex-start;
+    padding-top: 10vh;
   }
 
-  .login-wrapper .tracker-form {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box;
-    padding: 30px 20px !important;
+  .login-card {
+    max-width: 100%;
+    padding: 30px 20px;
   }
 
-  .login-wrapper input {
-    font-size: 16px !important; 
-    padding: 12px !important;
+  .login-card input {
+    font-size: 16px; /* Prevents iOS auto-zoom on focus */
+    padding: 12px;
   }
 }
