@@ -142,12 +142,12 @@ const Tracker = ({ onLogout }) => {
   const confirmDelete = async () => {
     setIsDeleteConfirmOpen(false); // Close modal
     try {
-      const response = await fetch(`${API_BASE}/save_record/delete/${selectedId}`, {
-        method: "DELETE",
+      const response = await fetch(`${API_BASE}/save_record/archive/${selectedId}`, {
+        method: "PUT",
       });
 
       if (response.ok) {
-        await fetchRecords(); // Refresh table
+        await fetchRecords(); // Refresh table (filters out archived items)
         setSelectedId(null);   // Clear selection
         alert("Record has been deleted.");
       } else {
