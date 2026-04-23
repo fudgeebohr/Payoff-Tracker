@@ -14,6 +14,7 @@ const Tracker = ({ onLogout }) => {
     platform: "",
     payer: ""
   });
+  const [isPayConfirmOpen, setIsPayConfirmOpen] = useState(false);
 
   const API_BASE = "https://payofftrackerapi.onrender.com";
 
@@ -88,27 +89,29 @@ const Tracker = ({ onLogout }) => {
     }
   };
 
-  const handlePayMonth = async () => {
+  const handlePayClick = () => {
     if (!selectedId) return alert("Please select an item from the table first!");
-    const item = records.find(r => r._id === selectedId);
-    const newPaidMonths = item.paidMonths + 1;
-    const shouldArchive = newPaidMonths >= item.totalMonths;
+    setIsPayConfirmOpen(true);
+  };
 
+  const confirmPayment = async () => {
+    setIsPayConfirmOpen(false); // Close modal immediately
     try {
-      const response = await fetch(`${API_BASE}/save_record/${selectedId}`, {
+      const response = await fetch(`${API_BASE}/save_record/pay/${selectedId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          paidMonths: newPaidMonths,
-          archived: shouldArchive 
-        })
       });
+
       if (response.ok) {
+        const updatedData = await response.json();
         await fetchRecords();
-        if (shouldArchive) alert(`${item.itemName} is fully paid and archived!`);
+
+        if (updatedData.archived) {
+          alert(`${updatedData.itemName} has been fully paid and archived!`);
+          setSelectedId(null);
+        }
       }
     } catch (error) {
-      console.error("Payment error:", error);
+      console.error("Payment Error:", error);
     }
   };
 
@@ -204,7 +207,7 @@ const Tracker = ({ onLogout }) => {
 
         <div className="summary-footer">
           <div className="action-buttons">
-            <button className="btn-action pay" onClick={handlePayMonth}>Pay 1 Month</button>
+            <button className="btn-action pay" onClick={handlePayClick}>Pay 1 Month</button>
             <button className="btn-action edit" onClick={() => {
               const item = records.find(r => r._id === selectedId);
               if (item) { setEditData(item); setIsEditing(true); }
@@ -283,6 +286,28 @@ const Tracker = ({ onLogout }) => {
           </div>
         </div>
       )}
+
+      {isPayConfirmOpen && (
+        <div className="modal-overlay">
+          <div className="modal-panel">
+            <h2 className="modal-title">Confirm Payment</h2>
+            <p style={{ textAlign: 'center', marginBottom: '20px', color: '#5a4a5a' }}>
+              Are you sure you want to add 1 month of progress to 
+              <strong> {records.find(r => r._id === selectedId)?.itemName}</strong>?
+            </p>
+            
+            <div className="modal-footer">
+              <button className="add-record-btn" onClick={confirmPayment}>
+                Yes, Confirm Payment
+              </button>
+              <button className="logout-btn" onClick={() => setIsPayConfirmOpen(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

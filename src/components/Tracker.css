@@ -397,6 +397,16 @@ tr:hover {
   }
 
   .modal-footer {
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .modal-panel p {
+    font-family: 'Century Gothic', sans-serif;
+    line-height: 1.5;
+    font-size: 0.95rem;
   }
 }
