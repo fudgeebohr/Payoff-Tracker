@@ -219,16 +219,45 @@ const Tracker = ({ onLogout }) => {
         </div>
       </main>
 
-      {/* Edit Modal Overlay */}
       {isEditing && (
         <div className="modal-overlay">
           <div className="modal-panel">
-            <h2 className="login-title">Edit Record</h2>
+            <h2 className="modal-title">Edit Record</h2>
+            
             <form onSubmit={handleUpdate} className="tracker-form">
-              <input type="text" name="itemName" value={editData.itemName} onChange={handleEditChange} placeholder="Item Name" required />
-              <input type="number" name="amount" value={editData.amount} onChange={handleEditChange} placeholder="Monthly Amortization" required />
-              <input type="number" name="totalMonths" value={editData.totalMonths} onChange={handleEditChange} placeholder="Total Months" required />
-              <input type="number" name="paidMonths" value={editData.paidMonths} onChange={handleEditChange} placeholder="Months Paid" required />
+              {/* All inputs inside the centered box */}
+              <input 
+                type="text" 
+                name="itemName" 
+                value={editData.itemName} 
+                onChange={handleEditChange} 
+                placeholder="Item Name" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="amount" 
+                value={editData.amount} 
+                onChange={handleEditChange} 
+                placeholder="Monthly Amortization" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="totalMonths" 
+                value={editData.totalMonths} 
+                onChange={handleEditChange} 
+                placeholder="Total Months" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="paidMonths" 
+                value={editData.paidMonths} 
+                onChange={handleEditChange} 
+                placeholder="Months Paid" 
+                required 
+              />
               
               <select name="platform" value={editData.platform} onChange={handleEditChange}>
                 <option value="SPayLater">SPayLater</option>
@@ -243,8 +272,12 @@ const Tracker = ({ onLogout }) => {
                 <option value="Group (Thesis)">Group (Thesis)</option>
               </select>
 
-              <button type="submit" className="add-record-btn">Save Changes</button>
-              <button type="button" className="logout-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+              <div className="modal-footer">
+                <button type="submit" className="add-record-btn">Save Changes</button>
+                <button type="button" className="logout-btn" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>

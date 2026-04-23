@@ -251,23 +251,66 @@ tr:hover {
   white-space: nowrap; /* Keeps total on one line in web view */
 }
 
-/* MODAL STYLING */
+/* MODAL OVERLAY: Semi-transparent backdrop */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(90, 74, 90, 0.4); /* Subtle purple-tinted dimming */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
+  backdrop-filter: blur(3px); /* Soft focus effect */
 }
 
-.modal-content {
+/* MODAL PANEL: Matching your Login box */
+.modal-panel {
+  width: 100%;
+  max-width: 400px;
   background: white;
   padding: 40px;
   border-radius: 8px;
-  width: 400px;
+  border: 1px solid #d3b8d3;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  color: #9b6d9b;
+  text-align: center;
+  margin-bottom: 25px;
+  font-family: 'Century Gothic', sans-serif;
+  font-weight: bold;
+}
+
+.modal-panel .tracker-form {
+  gap: 15px; /* Consistent spacing for placeholders */
+}
+
+/* ACTION BUTTONS WITHIN MODAL */
+.modal-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Responsive adjustment for the modal */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 20px;
+    align-items: flex-start;
+    padding-top: 5vh;
+  }
+  .modal-panel {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
 }
 
 /* MOBILE RESPONSIVE */
