@@ -14,7 +14,7 @@ html, body, #root {
   background-color: #fdf5e6;
   color: #5a4a5a;
   box-sizing: border-box;
-  font-family: 'Century Gothic', CenturyGothic, sans-serif;
+  font-family: 'Century Gothic', sans-serif;
 }
 
 /* SIDEBAR: PINNED TO LEFT */
@@ -61,7 +61,7 @@ html, body, #root {
   background: white;
   box-sizing: border-box;
   font-size: 0.95rem;
-  font-family: 'Century Gothic', CenturyGothic, sans-serif;
+  font-family: 'Century Gothic', sans-serif;
 }
 
 /* UNIFIED BUTTON STYLE */
@@ -76,7 +76,7 @@ html, body, #root {
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.2s ease;
-  font-family: 'Century Gothic', CenturyGothic, sans-serif;
+  font-family: 'Century Gothic', sans-serif;
 }
 
 .add-record-btn {
@@ -170,6 +170,91 @@ tr:hover {
   font-weight: bold;
   color: #d19a66;
   margin-left: 10px;
+}
+
+/* Highlight for selected row */
+.selected-row {
+  background-color: #efe2ef !important;
+  border-left: 5px solid #9b6d9b;
+}
+
+/* ACTION BUTTONS: MATCHING SIDEBAR BUTTON SIZE */
+.action-buttons {
+  display: flex;
+  gap: 15px; /* Spacing between the three buttons */
+}
+
+.btn-action {
+  flex: 1; /* This makes all 3 buttons have equal width if needed */
+  padding: 14px 25px; /* Matches the 14px vertical padding of the sidebar */
+  border-radius: 4px;
+  font-family: 'Century Gothic', sans-serif;
+  font-weight: bold;
+  font-size: 1rem; /* Matches sidebar button font size */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none; /* Removing borders to match the solid look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px; /* Ensures they don't get too thin */
+}
+
+/* Specific Colors for each action */
+.btn-action.pay {
+  background-color: #9b6d9b;
+  color: white;
+}
+
+.btn-action.pay:hover {
+  background-color: #7a5a7a;
+}
+
+.btn-action.edit {
+  background-color: #efe2ef; /* A lighter version of your theme */
+  color: #5a4a5a;
+}
+
+.btn-action.edit:hover {
+  background-color: #d3b8d3;
+}
+
+.btn-action.delete {
+  background-color: #ff6b6b; /* Soft red for destructive action */
+  color: white;
+}
+
+.btn-action.delete:hover {
+  background-color: #e05a5a;
+}
+
+/* Adjusting the footer layout to give buttons more room */
+.summary-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid #d3b8d3;
+  margin-top: 10px;
+}
+
+/* MODAL STYLING */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  width: 400px;
 }
 
 /* MOBILE RESPONSIVE */
