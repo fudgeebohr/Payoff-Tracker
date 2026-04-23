@@ -1,0 +1,19 @@
+@media (max-width: 768px) {
+  .login-wrapper {
+    height: auto !important; 
+    padding: 40px 20px;
+    align-items: flex-start !important;
+  }
+
+  .login-wrapper .tracker-form {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    padding: 30px 20px !important;
+  }
+
+  .login-wrapper input {
+    font-size: 16px !important; 
+    padding: 12px !important;
+  }
+}

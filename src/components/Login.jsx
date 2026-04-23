@@ -79,7 +79,7 @@ const Login = ({ onLogin }) => {
 
 const styles = {
   wrapper: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#fdf5e6' },
-  form: { width: '320px', padding: '40px', background: 'white', borderRadius: '8px', border: '1px solid #d3b8d3', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' },
+  form: { maxWidth: '320px', width: '90%', padding: '40px', background: 'white', borderRadius: '8px', border: '1px solid #d3b8d3', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' },
   toggleText: { fontSize: '0.85rem', textAlign: 'center', marginTop: '20px' },
   toggleLink: { color: '#9b6d9b', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }
 };
