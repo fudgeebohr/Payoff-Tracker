@@ -183,12 +183,3 @@
   }
 }
 
-html, body, #root {
-  font-family: 'Century Gothic', CenturyGothic, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-input, select, button, textarea {
-  font-family: inherit;
-}

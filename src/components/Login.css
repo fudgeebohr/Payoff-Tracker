@@ -1,5 +1,6 @@
 @media (max-width: 768px) {
-  .login-wrapper {
+  .login-wrapper, html, body, #root {
+    font-family: 'Century Gothic', CenturyGothic, sans-serif;
     height: auto !important; 
     padding: 40px 20px;
     align-items: flex-start !important;
