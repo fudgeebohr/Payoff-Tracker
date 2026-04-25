@@ -317,7 +317,7 @@ const Tracker = ({ onLogout }) => {
               Are you sure you want to delete <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?
             </p>
             <div className="modal-footer">
-              <button className="add-record-btn" style={{backgroundColor: '#ff6b6b'}} onClick={confirmDelete}>Archive</button>
+              <button className="add-record-btn" style={{backgroundColor: '#ff6b6b'}} onClick={confirmDelete}>Delete</button>
               <button className="logout-btn" onClick={() => setIsDeleteConfirmOpen(false)}>Cancel</button>
             </div>
           </div>
