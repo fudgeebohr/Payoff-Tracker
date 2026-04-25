@@ -100,7 +100,12 @@ const Tracker = ({ onLogout }) => {
       const response = await fetch(`${API_BASE}/save_record/update/${editData._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editData)
+        body: JSON.stringify({
+          ...editData,
+          amount: Number(editData.amount),
+          totalMonths: Number(editData.totalMonths),
+          paidMonths: Number(editData.paidMonths)
+        })
       });
       if (response.ok) {
         setIsEditing(false);
@@ -149,6 +154,7 @@ const Tracker = ({ onLogout }) => {
   };
 
   const handleAddOption = async (type) => {
+    if (!newOption.trim()) return alert("Please enter a name");
     const endpoint = type === 'payer' ? 'payers' : 'platforms';
     try {
       const res = await fetch(`${API_BASE}/options/${endpoint}`, {
@@ -160,7 +166,8 @@ const Tracker = ({ onLogout }) => {
         setNewOption("");
         setIsPayerModalOpen(false);
         setIsPlatformModalOpen(false);
-        fetchOptions();
+        await fetchOptions(); // Re-fetch to sync dropdowns immediately
+        alert(`New ${type} added!`);
       }
     } catch (err) {
       console.error("Option add error:", err);
@@ -186,35 +193,27 @@ const Tracker = ({ onLogout }) => {
           
           <select name="platform" value={formData.platform} onChange={handleChange} required>
             <option value="" disabled hidden>Select Platform</option>
-            {platforms.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
+            {platforms.map(p => (
+              <option key={p._id} value={p.name}>{p.name}</option>
+            ))}
           </select>
 
           <select name="payer" value={formData.payer} onChange={handleChange} required>
             <option value="" disabled hidden>Who is Paying?</option>
-            {payers.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
+            {payers.map(p => (
+              <option key={p._id} value={p.name}>{p.name}</option>
+            ))}
           </select>
 
           <button type="submit" className="add-record-btn">+ Add Record</button>
           
           <div className="option-buttons-row">
-            <button 
-              type="button" 
-              className="btn-action edit" 
-              onClick={() => setIsPayerModalOpen(true)}
-            >
-              + Add Payer
-            </button>
-            <button 
-              type="button" 
-              className="btn-action edit" 
-              onClick={() => setIsPlatformModalOpen(true)}
-            >
-              + Add Platform
-            </button>
+            <button type="button" className="btn-action edit" onClick={() => setIsPayerModalOpen(true)}>+ Add Payer</button>
+            <button type="button" className="btn-action edit" onClick={() => setIsPlatformModalOpen(true)}>+ Add Platform</button>
           </div>
         </form>
 
-        <button onClick={onLogout} className="logout-btn">Logout</button>
+        <button onClick={() => { localStorage.removeItem("isLoggedIn"); onLogout(); }} className="logout-btn">Logout</button>
       </aside>
 
       <main className="main-content">
@@ -271,12 +270,19 @@ const Tracker = ({ onLogout }) => {
               <input type="number" name="amount" value={editData.amount} onChange={handleEditChange} required />
               <input type="number" name="totalMonths" value={editData.totalMonths} onChange={handleEditChange} required />
               <input type="number" name="paidMonths" value={editData.paidMonths} onChange={handleEditChange} required />
+              
               <select name="platform" value={editData.platform} onChange={handleEditChange}>
-                {platforms.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
+                {platforms.map(p => (
+                  <option key={p._id} value={p.name}>{p.name}</option>
+                ))}
               </select>
+
               <select name="payer" value={editData.payer} onChange={handleEditChange}>
-                {payers.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
+                {payers.map(p => (
+                  <option key={p._id} value={p.name}>{p.name}</option>
+                ))}
               </select>
+
               <div className="modal-footer">
                 <button type="submit" className="add-record-btn">Save Changes</button>
                 <button type="button" className="logout-btn" onClick={() => setIsEditing(false)}>Cancel</button>
@@ -291,7 +297,9 @@ const Tracker = ({ onLogout }) => {
         <div className="modal-overlay">
           <div className="modal-panel">
             <h2 className="modal-title">Confirm Payment</h2>
-            <p>Add 1 month of progress to <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?</p>
+            <p style={{ textAlign: 'center', marginBottom: '20px' }}>
+              Add 1 month of progress to <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?
+            </p>
             <div className="modal-footer">
               <button className="add-record-btn" onClick={confirmPayment}>Confirm</button>
               <button className="logout-btn" onClick={() => setIsPayConfirmOpen(false)}>Cancel</button>
@@ -305,7 +313,9 @@ const Tracker = ({ onLogout }) => {
         <div className="modal-overlay">
           <div className="modal-panel">
             <h2 className="modal-title" style={{color: '#ff6b6b'}}>Archive Record</h2>
-            <p>Immediately archive <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?</p>
+            <p style={{ textAlign: 'center', marginBottom: '20px' }}>
+              Immediately archive <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?
+            </p>
             <div className="modal-footer">
               <button className="add-record-btn" style={{backgroundColor: '#ff6b6b'}} onClick={confirmDelete}>Archive</button>
               <button className="logout-btn" onClick={() => setIsDeleteConfirmOpen(false)}>Cancel</button>
@@ -320,7 +330,12 @@ const Tracker = ({ onLogout }) => {
           <div className="modal-panel">
             <h2 className="modal-title">Add New {isPayerModalOpen ? "Payer" : "Platform"}</h2>
             <div className="tracker-form">
-              <input type="text" placeholder="Enter Name" value={newOption} onChange={(e) => setNewOption(e.target.value)} />
+              <input 
+                type="text" 
+                placeholder={isPayerModalOpen ? "Enter Payer Name" : "Enter Platform Name"} 
+                value={newOption} 
+                onChange={(e) => setNewOption(e.target.value)} 
+              />
               <div className="modal-footer">
                 <button className="add-record-btn" onClick={() => handleAddOption(isPayerModalOpen ? 'payer' : 'platform')}>Save</button>
                 <button className="logout-btn" onClick={() => {setIsPayerModalOpen(false); setIsPlatformModalOpen(false); setNewOption("");}}>Cancel</button>
