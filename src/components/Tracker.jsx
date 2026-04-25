@@ -312,9 +312,9 @@ const Tracker = ({ onLogout }) => {
       {isDeleteConfirmOpen && (
         <div className="modal-overlay">
           <div className="modal-panel">
-            <h2 className="modal-title" style={{color: '#ff6b6b'}}>Archive Record</h2>
+            <h2 className="modal-title" style={{color: '#ff6b6b'}}>Delete Record</h2>
             <p style={{ textAlign: 'center', marginBottom: '20px' }}>
-              Immediately archive <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?
+              Are you sure you want to delete <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?
             </p>
             <div className="modal-footer">
               <button className="add-record-btn" style={{backgroundColor: '#ff6b6b'}} onClick={confirmDelete}>Archive</button>

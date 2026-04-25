@@ -292,6 +292,7 @@ tr:hover {
   border: 1px solid #d3b8d3;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  font-family: 'Century Gothic', sans-serif;
 }
 
 .modal-panel .tracker-form {
