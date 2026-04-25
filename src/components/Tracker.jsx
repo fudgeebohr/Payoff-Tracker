@@ -139,24 +139,25 @@ const Tracker = ({ onLogout }) => {
     setIsDeleteConfirmOpen(true);
   };
 
-  const confirmDelete = async () => {
-    setIsDeleteConfirmOpen(false); // Close modal
-    try {
-      const response = await fetch(`${API_BASE}/save_record/archive/${selectedId}`, {
-        method: "PUT",
-      });
+const confirmDelete = async () => {
+  setIsDeleteConfirmOpen(false);
+  try {
+    const response = await fetch(`${API_BASE}/save_record/archive/${selectedId}`, {
+      method: "PUT",
+    });
 
-      if (response.ok) {
-        await fetchRecords(); // Refresh table (filters out archived items)
-        setSelectedId(null);   // Clear selection
-        alert("Record has been deleted.");
-      } else {
-        alert("Failed to delete record.");
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
+    if (response.ok) {
+      await fetchRecords();
+      setSelectedId(null);
+      alert("Record has been deleted.");
+    } else {
+      console.error("Server responded with error:", response.status);
+      alert("Failed to delete record. Check console for details.");
     }
-  };
+  } catch (error) {
+    console.error("Network Error:", error);
+  }
+};
 
   const calculateTotalDue = () => {
     return records.reduce((sum, rec) => sum + rec.amount, 0).toLocaleString();
