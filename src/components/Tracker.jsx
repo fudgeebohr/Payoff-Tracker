@@ -4,8 +4,21 @@ import React, { useState, useEffect } from "react";
 const Tracker = ({ onLogout }) => {
   const [records, setRecords] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
+  
+  // Lists for dynamic dropdowns
+  const [payers, setPayers] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+
+  // Modal visibility states
   const [isEditing, setIsEditing] = useState(false);
+  const [isPayConfirmOpen, setIsPayConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isPayerModalOpen, setIsPayerModalOpen] = useState(false);
+  const [isPlatformModalOpen, setIsPlatformModalOpen] = useState(false);
+
+  // Form states
   const [editData, setEditData] = useState(null);
+  const [newOption, setNewOption] = useState("");
   const [formData, setFormData] = useState({
     itemName: "",
     amount: "",
@@ -14,23 +27,32 @@ const Tracker = ({ onLogout }) => {
     platform: "",
     payer: ""
   });
-  const [isPayConfirmOpen, setIsPayConfirmOpen] = useState(false);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const API_BASE = "https://payofftrackerapi.onrender.com";
 
   useEffect(() => {
     fetchRecords();
+    fetchOptions();
   }, []);
 
   const fetchRecords = async () => {
     try {
       const response = await fetch(`${API_BASE}/save_record`);
       const data = await response.json();
-      // Only show items that are not archived
       setRecords(data.filter(r => !r.archived));
     } catch (err) {
       console.error("Error fetching records:", err);
+    }
+  };
+
+  const fetchOptions = async () => {
+    try {
+      const pRes = await fetch(`${API_BASE}/options/payers`);
+      const plRes = await fetch(`${API_BASE}/options/platforms`);
+      if (pRes.ok) setPayers(await pRes.json());
+      if (plRes.ok) setPlatforms(await plRes.json());
+    } catch (err) {
+      console.error("Error fetching options:", err);
     }
   };
 
@@ -73,91 +95,77 @@ const Tracker = ({ onLogout }) => {
   };
 
   const handleUpdate = async (e) => {
-  e.preventDefault();
-  
-  try {
-    const response = await fetch(`${API_BASE}/save_record/update/${editData._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...editData,
-        amount: Number(editData.amount),
-        totalMonths: Number(editData.totalMonths),
-        paidMonths: Number(editData.paidMonths)
-      })
-    });
-
-    if (response.ok) {
-      // 1. Close the modal
-      setIsEditing(false);
-      
-      // 2. Refresh the table data from the database
-      await fetchRecords();
-      
-      // 3. Clear the selection
-      setSelectedId(null);
-      
-      alert("Record updated successfully!");
-    } else {
-      const errorData = await response.json();
-      alert(`Update failed: ${errorData.message}`);
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_BASE}/save_record/update/${editData._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editData)
+      });
+      if (response.ok) {
+        setIsEditing(false);
+        setSelectedId(null);
+        await fetchRecords();
+        alert("Record Updated!");
+      }
+    } catch (error) {
+      console.error("Update error:", error);
     }
-  } catch (error) {
-    console.error("Update error:", error);
-    alert("An error occurred while updating the record.");
-  }
-  };
-
-  const handlePayClick = () => {
-    if (!selectedId) return alert("Please select an item from the table first!");
-    setIsPayConfirmOpen(true);
   };
 
   const confirmPayment = async () => {
-    setIsPayConfirmOpen(false); // Close modal immediately
+    setIsPayConfirmOpen(false);
     try {
       const response = await fetch(`${API_BASE}/save_record/pay/${selectedId}`, {
         method: "PUT",
       });
-
       if (response.ok) {
         const updatedData = await response.json();
         await fetchRecords();
-
         if (updatedData.archived) {
-          alert(`${updatedData.itemName} has been fully paid and archived!`);
+          alert(`${updatedData.itemName} is now fully paid and archived!`);
           setSelectedId(null);
         }
       }
     } catch (error) {
-      console.error("Payment Error:", error);
+      console.error("Payment error:", error);
     }
   };
 
-  const handleDeleteClick = () => {
-    if (!selectedId) return alert("Please select an item from the table first!");
-    setIsDeleteConfirmOpen(true);
+  const confirmDelete = async () => {
+    setIsDeleteConfirmOpen(false);
+    try {
+      const response = await fetch(`${API_BASE}/save_record/archive/${selectedId}`, {
+        method: "PUT",
+      });
+      if (response.ok) {
+        await fetchRecords();
+        setSelectedId(null);
+        alert("Record has been deleted.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
   };
 
-const confirmDelete = async () => {
-  setIsDeleteConfirmOpen(false);
-  try {
-    const response = await fetch(`${API_BASE}/save_record/archive/${selectedId}`, {
-      method: "PUT",
-    });
-
-    if (response.ok) {
-      await fetchRecords();
-      setSelectedId(null);
-      alert("Record has been deleted.");
-    } else {
-      console.error("Server responded with error:", response.status);
-      alert("Failed to delete record. Check console for details.");
+  const handleAddOption = async (type) => {
+    const endpoint = type === 'payer' ? 'payers' : 'platforms';
+    try {
+      const res = await fetch(`${API_BASE}/options/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newOption })
+      });
+      if (res.ok) {
+        setNewOption("");
+        setIsPayerModalOpen(false);
+        setIsPlatformModalOpen(false);
+        fetchOptions();
+      }
+    } catch (err) {
+      console.error("Option add error:", err);
     }
-  } catch (error) {
-    console.error("Network Error:", error);
-  }
-};
+  };
 
   const calculateTotalDue = () => {
     return records.reduce((sum, rec) => sum + rec.amount, 0).toLocaleString();
@@ -178,23 +186,35 @@ const confirmDelete = async () => {
           
           <select name="platform" value={formData.platform} onChange={handleChange} required>
             <option value="" disabled hidden>Select Platform</option>
-            <option value="SPayLater">SPayLater</option>
-            <option value="TikTok PayLater">TikTok PayLater</option>
-            <option value="GLoan">GLoan</option>
+            {platforms.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
           </select>
 
           <select name="payer" value={formData.payer} onChange={handleChange} required>
             <option value="" disabled hidden>Who is Paying?</option>
-            <option value="Kenneth">Kenneth</option>
-            <option value="Joy">Joy</option>
-            <option value="Shane">Shane</option>
-            <option value="Group (Thesis)">Group (Thesis)</option>
+            {payers.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
           </select>
 
           <button type="submit" className="add-record-btn">+ Add Record</button>
+          
+          <div className="option-buttons-row">
+            <button 
+              type="button" 
+              className="btn-action edit" 
+              onClick={() => setIsPayerModalOpen(true)}
+            >
+              + Add Payer
+            </button>
+            <button 
+              type="button" 
+              className="btn-action edit" 
+              onClick={() => setIsPlatformModalOpen(true)}
+            >
+              + Add Platform
+            </button>
+          </div>
         </form>
 
-        <button onClick={() => { localStorage.removeItem("isLoggedIn"); onLogout(); }} className="logout-btn">Logout</button>
+        <button onClick={onLogout} className="logout-btn">Logout</button>
       </aside>
 
       <main className="main-content">
@@ -202,12 +222,7 @@ const confirmDelete = async () => {
           <table>
             <thead>
               <tr>
-                <th>Item</th>
-                <th>Platform</th>
-                <th>Payer</th>
-                <th>Monthly</th>
-                <th>Progress</th>
-                <th>Rem. Balance</th>
+                <th>Item</th><th>Platform</th><th>Payer</th><th>Monthly</th><th>Progress</th><th>Rem. Balance</th>
               </tr>
             </thead>
             <tbody>
@@ -231,13 +246,13 @@ const confirmDelete = async () => {
 
         <div className="summary-footer">
           <div className="action-buttons">
-            <button className="btn-action pay" onClick={handlePayClick}>Pay 1 Month</button>
+            <button className="btn-action pay" onClick={() => selectedId ? setIsPayConfirmOpen(true) : alert("Select item first")}>Pay 1 Month</button>
             <button className="btn-action edit" onClick={() => {
               const item = records.find(r => r._id === selectedId);
               if (item) { setEditData(item); setIsEditing(true); }
-              else { alert("Select an item first!"); }
+              else alert("Select item first");
             }}>Edit Selected</button>
-            <button className="btn-action delete" onClick={handleDeleteClick}>Delete</button>
+            <button className="btn-action delete" onClick={() => selectedId ? setIsDeleteConfirmOpen(true) : alert("Select item first")}>Delete</button>
           </div>
           <div className="total-group">
             <span className="total-text">TOTAL MONTHLY DUE: </span>
@@ -246,119 +261,74 @@ const confirmDelete = async () => {
         </div>
       </main>
 
+      {/* EDIT MODAL */}
       {isEditing && (
         <div className="modal-overlay">
           <div className="modal-panel">
-            <h2 className="modal-title" style={{ textAlign: 'center', color: '#9b6d9b', marginBottom: '20px' }}>
-              Edit Record
-            </h2>
-            
+            <h2 className="modal-title">Edit Record</h2>
             <form onSubmit={handleUpdate} className="tracker-form">
-              <input 
-                type="text" 
-                name="itemName" 
-                value={editData.itemName} 
-                onChange={handleEditChange} 
-                placeholder="Item Name" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="amount" 
-                value={editData.amount} 
-                onChange={handleEditChange} 
-                placeholder="Monthly Amortization" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="totalMonths" 
-                value={editData.totalMonths} 
-                onChange={handleEditChange} 
-                placeholder="Total Months" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="paidMonths" 
-                value={editData.paidMonths} 
-                onChange={handleEditChange} 
-                placeholder="Months Paid" 
-                required 
-              />
-              
+              <input type="text" name="itemName" value={editData.itemName} onChange={handleEditChange} required />
+              <input type="number" name="amount" value={editData.amount} onChange={handleEditChange} required />
+              <input type="number" name="totalMonths" value={editData.totalMonths} onChange={handleEditChange} required />
+              <input type="number" name="paidMonths" value={editData.paidMonths} onChange={handleEditChange} required />
               <select name="platform" value={editData.platform} onChange={handleEditChange}>
-                <option value="SPayLater">SPayLater</option>
-                <option value="TikTok PayLater">TikTok PayLater</option>
-                <option value="GLoan">GLoan</option>
+                {platforms.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
               </select>
-
               <select name="payer" value={editData.payer} onChange={handleEditChange}>
-                <option value="Kenneth">Kenneth</option>
-                <option value="Joy">Joy</option>
-                <option value="Shane">Shane</option>
-                <option value="Group (Thesis)">Group (Thesis)</option>
+                {payers.map(p => <option key={p._id} value={p.name}>{p.name}</option>)}
               </select>
-
               <div className="modal-footer">
                 <button type="submit" className="add-record-btn">Save Changes</button>
-                <button type="button" className="logout-btn" onClick={() => setIsEditing(false)}>
-                  Cancel
-                </button>
+                <button type="button" className="logout-btn" onClick={() => setIsEditing(false)}>Cancel</button>
               </div>
             </form>
           </div>
         </div>
       )}
 
+      {/* PAY CONFIRM MODAL */}
       {isPayConfirmOpen && (
         <div className="modal-overlay">
           <div className="modal-panel">
             <h2 className="modal-title">Confirm Payment</h2>
-            <p style={{ textAlign: 'center', marginBottom: '20px', color: '#5a4a5a' }}>
-              Are you sure you want to add 1 month of progress to 
-              <strong> {records.find(r => r._id === selectedId)?.itemName}</strong>?
-            </p>
-            
+            <p>Add 1 month of progress to <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?</p>
             <div className="modal-footer">
-              <button className="add-record-btn" onClick={confirmPayment}>
-                Yes, Confirm Payment
-              </button>
-              <button className="logout-btn" onClick={() => setIsPayConfirmOpen(false)}>
-                Cancel
-              </button>
+              <button className="add-record-btn" onClick={confirmPayment}>Confirm</button>
+              <button className="logout-btn" onClick={() => setIsPayConfirmOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
       )}
 
+      {/* DELETE CONFIRM MODAL */}
       {isDeleteConfirmOpen && (
         <div className="modal-overlay">
           <div className="modal-panel">
-            <h2 className="modal-title" style={{ color: '#ff6b6b' }}>Delete Record</h2>
-            <p style={{ textAlign: 'center', marginBottom: '20px', color: '#5a4a5a' }}>
-              Are you sure you want to delete 
-              <strong> {records.find(r => r._id === selectedId)?.itemName}</strong>? 
-              This will remove it from your active list immediately.
-            </p>
-            
+            <h2 className="modal-title" style={{color: '#ff6b6b'}}>Archive Record</h2>
+            <p>Immediately archive <strong>{records.find(r => r._id === selectedId)?.itemName}</strong>?</p>
             <div className="modal-footer">
-              {/* Using a red button style for the destructive action */}
-              <button 
-                className="add-record-btn" 
-                style={{ backgroundColor: '#ff6b6b' }} 
-                onClick={confirmDelete}
-              >
-                Yes, Delete It
-              </button>
-              <button className="logout-btn" onClick={() => setIsDeleteConfirmOpen(false)}>
-                Cancel
-              </button>
+              <button className="add-record-btn" style={{backgroundColor: '#ff6b6b'}} onClick={confirmDelete}>Archive</button>
+              <button className="logout-btn" onClick={() => setIsDeleteConfirmOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
       )}
 
+      {/* ADD PAYER/PLATFORM MODALS */}
+      {(isPayerModalOpen || isPlatformModalOpen) && (
+        <div className="modal-overlay">
+          <div className="modal-panel">
+            <h2 className="modal-title">Add New {isPayerModalOpen ? "Payer" : "Platform"}</h2>
+            <div className="tracker-form">
+              <input type="text" placeholder="Enter Name" value={newOption} onChange={(e) => setNewOption(e.target.value)} />
+              <div className="modal-footer">
+                <button className="add-record-btn" onClick={() => handleAddOption(isPayerModalOpen ? 'payer' : 'platform')}>Save</button>
+                <button className="logout-btn" onClick={() => {setIsPayerModalOpen(false); setIsPlatformModalOpen(false); setNewOption("");}}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -410,3 +410,29 @@ tr:hover {
     font-size: 0.95rem;
   }
 }
+
+/* Sidebar options row */
+/* Sidebar options row: Stacking buttons */
+.option-buttons-row {
+  display: flex;
+  flex-direction: column; /* Stacks the buttons vertically */
+  gap: 10px;              /* Spacing between the buttons */
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.option-buttons-row .btn-action.edit {
+  width: 100%;            /* Makes it fill the container width */
+  padding: 14px;          /* Matches the exact padding of 'Add Record' */
+  font-size: 1rem;        /* Matches sidebar font size */
+  min-width: 0;           /* Overrides the 150px min-width from previous turns */
+  box-sizing: border-box;
+}
+
+/* Ensure they stack on mobile inside the sidebar */
+@media (max-width: 768px) {
+  .option-buttons-row {
+    flex-direction: column;
+  }
+}
