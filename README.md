@@ -13,10 +13,13 @@
 ---
 
 ## **Preview**
+<div align="center">
+
 <a href="https://ibb.co/QvBG9Vn0"><img src="https://i.ibb.co/XxBTXPpH/Screenshot-2026-04-26-101800.png" alt="Screenshot-2026-04-26-101800" border="0"></a>
 
 <a href="https://ibb.co/SwCr2qV8"><img src="https://i.ibb.co/zVvJ1KPY/image.png" alt="image" border="0"></a> 
 
+</div>
 ---
 
 ## **Tech Stack**
