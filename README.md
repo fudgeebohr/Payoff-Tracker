@@ -8,6 +8,8 @@
 
   **Payoff Tracker** is a comprehensive full-stack financial management tool designed to simplify the tracking of installment-based purchases. Built with the MERN stack, the application allows users to monitor monthly amortizations across various payment platforms and payers in real-time.
 
+[![GitHub issues](https://img.shields.io/github/issues/fudgeebohr/Payoff-Tracker?style=flat-square&logo=github&color=orange)](https://github.com/fudgeebohr/Payoff-Tracker/issues) [![Feature Requests](https://img.shields.io/github/issues/fudgeebohr/Payoff-Tracker/feature%20request?label=feature%20requests&style=flat-square&logo=github&color=brightgreen)](https://github.com/fudgeebohr/Payoff-Tracker/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+request%22)
+
 </div>
 
 ---
@@ -20,6 +22,7 @@
 <a href="https://ibb.co/SwCr2qV8"><img src="https://i.ibb.co/zVvJ1KPY/image.png" alt="image" border="0"></a> 
 
 </div>
+
 ---
 
 ## **Tech Stack**
